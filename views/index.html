@@ -9,8 +9,7 @@
     integrity="sha512-gqQjVKzHjTVr9aRgcZx8F0kCVyLzF2IvMKlPBRyB7+JF9aKJ9AFic7TYipI2JFiA5cRRF03GrtE/6CfB6ojJvg=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-    integrity="sha384-pzjw8h0g6jy8d6+Ld8mL9M6U1O/72lOg1qDiJJ4CkfkzS6jp9gTJl35u7bJqO1Lv"
-    crossorigin="anonymous">
+    integrity="sha384-pzjw8h0g6jy8d6+Ld8mL9M6U1O/72lOg1qDiJJ4CkfkzS6jp9gTJl35u7bJqO1Lv" crossorigin="anonymous">
   <style>
     body {
       background-color: #fff;
@@ -81,24 +80,24 @@
 
 <body>
   <div class="signup-container">
-    <form class="signup-form" action="http://localhost:4000/node/create" method="POST">
+    <form id="signup" class="signup-form">
       <h2>Signup</h2>
       <div class="form-group">
-        <input type="text" name="name" placeholder="Name" required>`
+        <input type="text" name="name" id="name" placeholder="Name" required>`
       </div>
       <div class="form-group">
-        <input type="email" name="email" placeholder="Email" required>`
+        <input type="email" name="email" id="email" placeholder="Email" required>`
         <br>
       </div>
       <div class="form-group">
-        <input type="text" name="pwd" placeholder="Password" required>
+        <input type="text" name="pwd" id="pwd" placeholder="Password" required>
         <i class="fas fa-user icon"></i>
       </div>
       <div class="form-group">
-        <input type="text" name="address" placeholder="Address" required>`
+        <input type="text" name="address" id="address" placeholder="Address" required>`
       </div>
       <div class="form-group">
-        <input type="text" name="phone" placeholder="phone" required>`
+        <input type="text" name="phone" id="phone" placeholder="phone" required>`
         <br>
         <br>
       </div>
@@ -107,5 +106,38 @@
       </div>
     </form>
   </div>
+
+
+
+  <script>
+
+    document.getElementById('signup').addEventListener('submit', function (e) {
+      e.preventDefault()
+
+      const name = document.getElementById('name')
+      const email = document.getElementById('email')
+      const pwd = document.getElementById('pwd')
+      const address = document.getElementById('address')
+      const phone = document.getElementById('phone')
+      // console.log(name.value, pwd.value)
+
+      fetch('/users/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: name.value, email: email.value, pwd: pwd.value, address: address.value, phone: phone.value })
+
+      })
+        .then(response => response.json())
+        .then(data => {
+          // console.log(data)
+          alert (data.message)
+        })
+
+    })
+
+  </script>
+
+
 </body>
+
 </html>

@@ -12,8 +12,8 @@ const sequelize = new Sequelize('node_task', 'root', '', {
   dialect: 'mysql'
 });
 
-const userRoutes = require('./routes/node');
-app.use('/node', userRoutes);
+const userRoutes = require('./routes/users');
+app.use('/users', userRoutes);
 app.use('/', (req,res)=>{
   res.sendFile(__dirname+ '/views/index.html');
 });
