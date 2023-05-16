@@ -86,3 +86,21 @@ exports.deleteUser = async (req, res) => {
     res.status(500).send('Error deleting user');
   }
 };
+
+
+const {user} = require('../models/index')
+
+module.export = async function userAdd (req, res) {
+  try {
+        const { name, email, pwd, address, phone } = req.body
+        const adduser = await user.create({ name, email, pwd, address, phone })
+        if (adduser) {
+            res.json({ status: 200, message: 'Added' })
+        } else {
+            res.json({ status: 400, message: 'Failed' })
+
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
