@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../controller/userController');
 
-const {user} = require('../models/index')
-
+const {user} = require('../models/')
+// const {user} = require('../models/user');
 // module.exports = (pool) => {
 
 // Create a new user
@@ -22,28 +22,36 @@ router.post('/create', async (req, res) =>{
     }
 });
 
-// Get a user by ID
-router.get('/:userId', userController.getUserById);
+router.get('/getall',async(req,res)=>{
+    try{
+    const users = await user.findAll();
+    res.json(users);
+    }catch(error){
+    console.error('Error retrieving users', error);
+    res.status(500).send('Error retrieving users');
+    }
 
-// Update a user by ID
-router.put('/:userId', userController.updateUser);
-
-// Delete a user by ID
-router.delete('/:userId', userController.deleteUser);
-
-router.get('/', (req, res) => {
-    res.json('Hello')
 })
-
-//     return router;
-// }
-
-
-// const express = require('express')
-// const route = express.Router()
-
-// route.get('/', (req, res) => {
-//     res.send('hello boi')
-// })
+router.delete('/users/:id', async (req, res) => {
+    const userId = req.params.id;
+  
+    try {
+      // Find the user by ID
+      const user = await user.findByPk(userId);
+  
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      // Delete the user
+      await user.destroy();
+  
+      return res.json({ message: 'User deleted successfully' });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+  });
+  
 
 module.exports = router

@@ -14,9 +14,14 @@ const sequelize = new Sequelize('node_task', 'root', '', {
 
 const userRoutes = require('./routes/users');
 app.use('/users', userRoutes);
-app.use('/', (req,res)=>{
+app.use('/add', (req,res)=>{
   res.sendFile(__dirname+ '/views/index.html');
 });
+
+app.use('/view', (req,res)=>{
+  res.sendFile(__dirname+ '/views/all.html');
+});
+
 app.listen(4000, () => {
   console.log('Server started on port 4000');
 });
