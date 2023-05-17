@@ -18,8 +18,22 @@ app.use('/add', (req,res)=>{
   res.sendFile(__dirname+ '/views/index.html');
 });
 
+
+app.use('/log', (req,res)=>{
+  res.sendFile(__dirname+ '/views/login.html');
+});
+
+// course routes begins here
+const courseRoutes= require('./routes/course')
+app.use('/course',courseRoutes)
+
 app.use('/view', (req,res)=>{
   res.sendFile(__dirname+ '/views/all.html');
+});
+
+
+app.use('/addcourse', (req,res)=>{
+  res.sendFile(__dirname+ '/views/course.html');
 });
 
 app.listen(4000, () => {

@@ -85,30 +85,18 @@
 <body>
   <div class="signup-container"  >
     <form id="signup" class="signup-form">
-      <h2>Signup</h2>
+      <h2>Register course</h2>
       <div class="form-group">
-        <input type="text" name="name" id="name" placeholder="Name" required>`
+        <input type="text" name="course_name" id="course_name" placeholder="Course name" required>`
       </div>
       <div class="form-group">
-        <input type="email" name="email" id="email" placeholder="Email" required>`
+        <input type="text" name="course_desc" id="course_desc" placeholder="Course description" required>`
         <br>
       </div>
       <div class="form-group">
-        <input type="text" name="pwd" id="pwd" placeholder="Password" required>
-        <i class="fas fa-user icon"></i>
+        <input type="submit" value="Register" style="cursor:pointer">
       </div>
-      <div class="form-group">
-        <input type="text" name="address" id="address" placeholder="Address" required>`
-      </div>
-      <div class="form-group">
-        <input type="text" name="phone" id="phone" placeholder="phone" required>`
-        <br>
-        <br>
-      </div>
-      <div class="form-group">
-        <input type="submit" value="Sign up" style="cursor:pointer">
-      </div>
-      <a href="/log" style="text-decoration: none;">Sign in</a>
+   
     </form>
   </div>
   <script>
@@ -116,24 +104,22 @@
     document.getElementById('signup').addEventListener('submit', function (e) {
       e.preventDefault()
 
-      const name = document.getElementById('name')
-      const email = document.getElementById('email')
-      const pwd = document.getElementById('pwd')
-      const address = document.getElementById('address')
-      const phone = document.getElementById('phone')
-      // console.log(name.value, pwd.value)
+      const course_name = document.getElementById('course_name')
+      const course_desc = document.getElementById('course_desc')
 
-      fetch('/users/create', {
+      fetch('/course/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: name.value, email: email.value, pwd: pwd.value, address: address.value, phone: phone.value })
+        body: JSON.stringify({course_name:course_name.value,course_desc:course_desc.value,})
 
       })
-        .then(response => response.json())
+      .then(response => response.json())
         .then(data => {
           // console.log(data)
           alert (data.message)
+          window.location.href = '/view';
         })
+
 
     })
 

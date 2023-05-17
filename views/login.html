@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    integrity="sha512-gqQjVKzHjTVr9aRgcZx8F0kCVyLzF2IvMKlPBRyB7+JF9aKJ9AFic7TYipI2JFiA5cRRF03GrtE/6CfB6ojJvg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-pzjw8h0g6jy8d6+Ld8mL9M6U1O/72lOg1qDiJJ4CkfkzS6jp9gTJl35u7bJqO1Lv" crossorigin="anonymous">
+  <style>
+    body {
+      background-color: #fff;
+      color: #000;
+    }
+
+    .signup-container {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .signup-form {
+      width: 400px;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      background-color: #fff;
+    }
+
+    .signup-form h2 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .signup-form .form-group {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .signup-form .form-group input {
+      width: 100%;
+      height: 40px;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background-color: #f5f5f5;
+    }
+
+    .signup-form .form-group input:focus {
+      outline: none;
+      background-color: #e8e8e8;
+    }
+
+    .signup-form .form-group .icon {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      color: #aaa;
+    }
+
+    .signup-form button[type="submit"] {
+      width: 100%;
+      height: 40px;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .signup-form button[type="submit"]:hover {
+      background-color: #0069d9;
+    }
+    .signup-container{
+      margin-top: 25vh;
+      height:40vh;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="signup-container"  >
+    <form id="signup" class="signup-form">
+      <h2>Login</h2>
+      
+      <div class="form-group">
+        <input type="email" name="email" id="email" placeholder="Email" required>`
+        <br>
+      </div>
+      <div class="form-group">
+        <input type="password" name="pwd" id="pwd" placeholder="Password" required>
+        <i class="fas fa-user icon"></i>
+      </div>
+      
+      <div class="form-group">
+        <input type="submit" value="Login" style="cursor:pointer">
+      </div>
+      <a href="/add" style="text-decoration: none;">Sign up</a>
+    </form>
+  </div>
+
+
+
+  <script>
+
+    document.getElementById('signup').addEventListener('submit', function (e) {
+      e.preventDefault()
+
+
+      const email = document.getElementById('email').value
+      const pwd = document.getElementById('pwd').value
+    
+
+      fetch('/users/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({email, pwd })
+
+      })
+      .then(function(response) {
+              if (response.ok) {
+                return response.json();
+              } else {
+                throw new Error('Error: ' + response.status);
+              }
+            })
+        .then(function(data) {
+              if (data.status === 200) {
+                alert('Signed in successfully');
+                window.location.href = '/view';
+              } else {
+                alert('Invalid credentials'); // Display an alert for invalid credentials
+                window.location.href = '/log';
+              }
+            })
+            .catch(function(err) {
+              alert('Error: ' + err.message);
+            });
+          });
+
+
+  </script>
+
+
+</body>
+
+</html>

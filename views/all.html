@@ -32,18 +32,15 @@ table {
 </style>
 <body>
     <div class="nav">
-        <button><a href="/add">Add new record</a></button>
+        <button><a href="/addcourse">Add new record</a></button>
     </div>
     <div class="tContainer" style="width:40%;margin:auto">
 
         <table id="user-table">
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Password</th>
-                <th>Address</th>
-                <th>Phone</th>
+                <th>Course Name</th>
+                <th>Course Description</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -53,7 +50,7 @@ table {
 </body>
 <script>
     function displayUserData() {
-      fetch('/users/getall') // Assuming this endpoint returns an array of user data
+      fetch('/course/getall') // Assuming this endpoint returns an array of user data
         .then(response => response.json())
         .then(data => {
           const tableBody = document.querySelector('#user-table tbody')
@@ -62,49 +59,21 @@ table {
           data.forEach(user => {
             const row = document.createElement('tr')
             const nameCell = document.createElement('td')
-            const emailCell = document.createElement('td')
-            const pwdCell = document.createElement('td')
-            const addressCell = document.createElement('td')
-            const phoneCell = document.createElement('td')
-            const actionCell = document.createElement('td')
-            const deleteLink = document.createElement('a')
+            const descCell = document.createElement('td')
+            
 
-            nameCell.textContent = user.name
-            emailCell.textContent = user.email
-            pwdCell.textContent = user.pwd
-            addressCell.textContent = user.address
-            phoneCell.textContent = user.phone
-
-            deleteLink.textContent = 'Delete'
-            deleteLink.classList.add('delete-link')
-            deleteLink.setAttribute('data-id', user.id)
-            deleteLink.addEventListener('click', deleteUser)
-
-            actionCell.appendChild(deleteLink)
+            nameCell.textContent = user.cname
+            descCell.textContent = user.cdesc
 
 
             row.appendChild(nameCell)
             row.appendChild(emailCell)
             row.appendChild(pwdCell)
-            row.appendChild(addressCell)
-            row.appendChild(phoneCell)
-            row.appendChild(actionCell)
             tableBody.appendChild(row)
           })
         })
     }
-    function deleteUser(e) {
-      const userId = e.target.getAttribute('data-id')
-
-      fetch(`/users/${userId}`, {
-        method: 'DELETE'
-      })
-        .then(response => response.json())
-        .then(data => {
-          alert(data.message)
-          displayUserData()
-        })
-    }
+  
 
     // Initial data load on page load
     displayUserData()
