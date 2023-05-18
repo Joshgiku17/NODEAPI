@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-
 const { user } = require('../models/')
 
 const jwt = require('jsonwebtoken');
@@ -49,6 +48,13 @@ router.get('/getall', async (req, res) => {
     }
 
 })
+
+// router.get('/getone', async (req, res) => {
+//     try {
+//         const
+//     }
+// });
+
 router.delete('/users/:id', async (req, res) => {
     const userId = req.params.id;
 
@@ -74,20 +80,39 @@ router.post('/login', async (req, res) => {
     try {
         const { email, pwd } = req.body
         console.log(email, pwd)
+        let token = ''; // Declare token variable with a default value
         const userlog = await user.findOne({ where: { email: email, pwd: pwd } })
         if (userlog) {
-            const token = jwt.sign({ user: { email } }, secretKey, { expiresIn: '5m' });
+            token = jwt.sign({ user: { email } }, secretKey, { expiresIn: '5m' });
             res.cookie('token', token, { httpOnly: true, maxAge: 3600000 });
             res.json({ status: 200, message: 'User Logged in', token });
-
         } else {
             res.status(201).json({ status: 400, message: 'Invalid email or Password' })
-
-            //res.json({status:400, message: 'Invalid email or password'})
-            //res.json({message: 'Invalid email or password'})
         }
     } catch (error) {
         console.error(error)
     }
-})
+});
+
+// router.post('/login', authenticate, async (req, res) => {
+//     try {
+//         const { email, pwd } = req.body
+//         let token = '';
+//         console.log(email, pwd)
+//         const userlog = await user.findOne({ where: { email: email, pwd: pwd } })
+//         if (userlog) {
+//             const token = jwt.sign({ user: { email } }, secretKey, { expiresIn: '5m' });
+//             res.cookie('token', token, { httpOnly: true, maxAge: 3600000 });
+//             res.json({ status: 200, message: 'User Logged in', token });
+
+//         } else {
+//             res.status(201).json({ status: 400, message: 'Invalid email or Password' })
+
+//             //res.json({status:400, message: 'Invalid email or password'})
+//             //res.json({message: 'Invalid email or password'})
+//         }
+//     } catch (error) {
+//         console.error(error)
+//     }
+// })
 module.exports = router

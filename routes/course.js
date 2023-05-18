@@ -1,33 +1,33 @@
 const express = require('express');
 const router = express.Router();
 
-const {course} = require('../models/')
+const { course } = require('../models/')
 
-// const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 
-// const secretKey = 'gikundiro';
-// function authenticate(req, res, next) {
-//     const token = req.cookies.token;
+const secretKey = 'gikundiro';
+function authenticate(req, res, next) {
+    const token = req.cookies.token;
 
 
-//     if (!token) {
-//         // res.redirect('/')
-//         return res.status(401).json({ message: 'Authorization header missing' });
-//     }
-//     jwt.verify(token, secretKey, (err, decoded) => {
-//         if (err) {
-//             return res.status(401).json({ message: 'Token is not valid' });
-//             // res.redirect('/')
-//         }
-//         req.user = decoded.user;
-//         next();
-//     });
-// }
+    if (!token) {
+        // res.redirect('/')
+        return res.status(401).json({ message: 'Authorization header missing' });
+    }
+    jwt.verify(token, secretKey, (err, decoded) => {
+        if (err) {
+            return res.status(401).json({ message: 'Token is not valid' });
+            // res.redirect('/')
+        }
+        req.user = decoded.user;
+        next();
+    });
+}
 
-router.post('/create', async (req, res) => {
+router.post('/create', authenticate, async (req, res) => {
     try {
-        const {course_name,course_desc} = req.body
-        const addcourse = await course.create({course_name,course_desc})
+        const { course_name, course_desc } = req.body
+        const addcourse = await course.create({ course_name, course_desc })
         if (addcourse) {
             res.json({ status: 200, message: 'Added' })
         } else {
@@ -39,7 +39,34 @@ router.post('/create', async (req, res) => {
     }
 });
 
-router.get('/getall', async (req, res) => {
+router.put('/update/:id', authenticate, async (req, res) => {
+    try {
+        const { course_name, course_desc } = req.body
+        const member = await course.findByPk(req.params.id);
+        if (!member) {
+            return res.json({ status: 404, message: "Couldn't find course" });
+        } else {
+            // res.json({ course_name, course_desc })
+            const updateMember = await course.update({ course_name, course_desc }, {
+                where: { id: req.params.id }
+            });
+
+            if (updateMember) {
+                return res.json({ status: 200, message: 'Course updated successfully' });
+            }
+            res.json({ status: 200, message: 'Course updated successfully' });
+        }
+        // res.json({ member})
+        res.json({ status: 400, message: 'Course not updated' });
+    }
+    catch (error) {
+        console.log(error);
+        res.json({ status: 500, message: 'Internal Server Error' });
+    }
+});
+
+
+router.get('/getall', authenticate, async (req, res) => {
     try {
         const allcourses = await course.findAll();
         res.json(allcourses);
@@ -49,45 +76,25 @@ router.get('/getall', async (req, res) => {
     }
 
 })
-// router.delete('/users/:id', async (req, res) => {
-//     const userId = req.params.id;
+// router.delete('/course/:id', authenticate, async (req, res) => {
+//     const id = req.params.id;
 
 //     try {
 //         // Find the user by ID
-//         const user = await user.findByPk(userId);
+//         const course = await course.findByPk(id);
 
-//         if (!user) {
+//         if (!course) {
 //             return res.status(404).json({ message: 'User not found' });
 //         }
 
 //         // Delete the user
-//         await user.destroy();
+//         await course.destroy();
 
-//         return res.json({ message: 'User deleted successfully' });
+//         return res.json({ message: 'course deleted successfully' });
 //     } catch (error) {
 //         console.error(error);
 //         return res.status(500).json({ message: 'Internal server error' });
 //     }
 // });
 
-// router.post('/login', async (req, res) => {
-//     try {
-//         const { email, pwd } = req.body
-//         console.log(email, pwd)
-//         const userlog = await user.findOne({ where: { email: email, pwd: pwd } })
-//         if (userlog) {
-//             const token = jwt.sign({ user: { email } }, secretKey, { expiresIn: '5m' });
-//             res.cookie('token', token, { httpOnly: true, maxAge: 3600000 });
-//             res.json({ status: 200, message: 'User Logged in', token });
-
-//         } else {
-//             res.status(201).json({ status: 400, message: 'Invalid email or Password' })
-
-//             //res.json({status:400, message: 'Invalid email or password'})
-//             //res.json({message: 'Invalid email or password'})
-//         }
-//     } catch (error) {
-//         console.error(error)
-//     }
-// })
 module.exports = router

@@ -32,7 +32,7 @@ table {
 </style>
 <body>
     <div class="nav">
-        <button><a href="/addcourse">Add new record</a></button>
+        <button><a href="/addcourse">Add new course</a></button>
     </div>
     <div class="tContainer" style="width:40%;margin:auto">
 
@@ -41,7 +41,7 @@ table {
               <tr>
                 <th>Course Name</th>
                 <th>Course Description</th>
-                <th>Action</th>
+      
               </tr>
             </thead>
             <tbody></tbody>
@@ -56,19 +56,18 @@ table {
           const tableBody = document.querySelector('#user-table tbody')
           tableBody.innerHTML = ''
 
-          data.forEach(user => {
+          data.forEach(course => {
             const row = document.createElement('tr')
             const nameCell = document.createElement('td')
             const descCell = document.createElement('td')
             
 
-            nameCell.textContent = user.cname
-            descCell.textContent = user.cdesc
+            nameCell.textContent = course.course_name
+            descCell.textContent = course.course_desc
 
 
             row.appendChild(nameCell)
-            row.appendChild(emailCell)
-            row.appendChild(pwdCell)
+            row.appendChild(descCell)
             tableBody.appendChild(row)
           })
         })
